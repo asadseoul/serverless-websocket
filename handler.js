@@ -108,9 +108,9 @@ const send = (event, connectionId) => {
 };
 
 
-const sendSingle = (event, connectionId) => {
+const sendSingle = (event) => {
   const body = JSON.parse(event.body);
-  const postData = body.data;
+  const postData = JSON.stringify({ "Body" : body.data, "incoming_from" : event.requestContext.connectionId});
   const socketId = body.socketId;  
 
   const endpoint = event.requestContext.domainName + "/" + event.requestContext.stage;
