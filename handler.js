@@ -4,8 +4,10 @@ const AWS = require('aws-sdk');
 let dynamo = new AWS.DynamoDB.DocumentClient();
 
 require('aws-sdk/clients/apigatewaymanagementapi'); 
+const TABLE_NAME = process.env.NAMES_DYNAMODB_TABLE;
+const STAGE_NAME = process.env.STAGE;
 
-const CHATCONNECTION_TABLE = 'chatIdTable';
+const CHATCONNECTION_TABLE = TABLE_NAME+'-'+STAGE_NAME;
 
 const successfullResponse = {
   statusCode: 200,

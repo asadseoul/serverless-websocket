@@ -1,8 +1,18 @@
 service: websockets-chat 
 
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  NAMES_DYNAMODB_TABLE: wobSocketChatTable-${self:custom.stage}
+  settings:
+    dev:
+      STAGE: ${self:custom.stage}
+    prod:
+      STAGE: ${self:custom.stage}
+
 provider:
   name: aws
   runtime: nodejs12.x
+  environment: ${self:custom.settings.${self:custom.stage}}
 
   iamRoleStatements:
     - Effect: Allow
@@ -54,5 +64,7 @@ resources:
         KeySchema:
         - AttributeName: "connectionId"
           KeyType: "HASH"
-        BillingMode: PAY_PER_REQUEST
-        TableName: chatIdTable
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.NAMES_DYNAMODB_TABLE}        
